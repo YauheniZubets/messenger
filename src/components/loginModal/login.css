@@ -1,0 +1,209 @@
+.user-modal-login {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(52, 54, 66, 0.9);
+    z-index: 3;
+    overflow-y: auto;
+    cursor: pointer;
+}
+.user-modal-container {
+    position: relative;
+    width: 90%;
+    max-width: 600px;
+    background: #FFF;
+    margin: 3em auto 4em;
+    cursor: auto;
+    border-radius: 0.25em;
+    background-color: white;
+}
+.modal-li {
+    list-style: none;
+    height: 30px;
+}
+ul {
+    padding-left: 0;
+  }
+.modal-li ::after {
+    content: "";
+    display: table;
+    clear: both;
+}
+.modal-li li {
+    float: left;
+    width: 45%;
+    text-align: center;
+}
+.modal-li li a {
+    display: block;
+    width: 100%;
+    height: 50px;
+    line-height: 50px;
+    background: #d2d8d8;
+    color: #809191;
+    text-decoration: none;
+
+}
+.selected {
+
+}
+.close {
+    width: 20%;
+}
+.cl-btn-2 {
+    /* margin: 20px; */
+    display: flex;
+    justify-content: center;
+    float: right;
+}
+.cl-btn-2 div {
+    cursor: pointer;
+    position: relative;  
+    height: 68px;
+    width: 45px;
+}
+.cl-btn-2 .leftright {
+    height: 4px;
+    width: 30px;
+    position: absolute;
+    margin-top: 24px;
+    background-color: #337AB7;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    transition: all .3s ease-in;
+}
+.cl-btn-2 .rightleft {
+    height: 4px;
+    width: 30px;
+    position: absolute;
+    margin-top: 24px;
+    background-color: #337AB7;
+    border-radius: 2px;
+    transform: rotate(-45deg);
+    transition: all .3s ease-in;
+}
+.cl-btn-2 .close-btn {
+    margin: 54px 0 0 -5px;
+    position: absolute;
+    color: #337AB7;
+    font-family: Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: all .3s ease-in;
+    opacity: 0; 
+}
+/* .cl-btn-2 div:hover .leftright {
+    transform: rotate(-45deg);
+    background-color: #000;
+}
+.cl-btn-2 div:hover .rightleft {
+    transform: rotate(45deg);
+    background-color: #000;
+} */
+.cl-btn-2 div:hover .close-btn {
+    opacity: 1;
+}
+.fieldset {
+    margin: 2em 0;
+    position: relative;
+}
+.top-fielset {
+    margin-top: -0.6em;
+}
+.image-replace {
+    display: inline-block;
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    bottom: auto;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    height: 20px;
+    width: 20px;
+    overflow: hidden;
+    text-indent: 100%;
+    white-space: nowrap;
+    color: transparent;
+    text-shadow: none;
+    background-repeat: no-repeat;
+    background-position: 50% 0;
+}
+.cd-form {
+    padding: 2em;
+}
+.cd-email {
+    background-image: url('cd-icon-email.svg');
+}
+input.has-border {
+    border: 1px solid #d2d8d8;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+input.has-padding {
+    padding: 12px 20px 12px 50px;
+}
+input.full-width {
+    width: 100%;
+    box-sizing: border-box;
+}
+.cd-password {
+    background-image: url('cd-icon-password.svg');
+}
+.hide-password {
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 6px 15px;
+    border-left: 1px solid #d2d8d8;
+    top: 50%;
+    bottom: auto;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 14px;
+    font-size: 0.875rem;
+    color: #343642;
+    text-decoration: none;
+}
+.cd-error-message {
+    content: '';
+    position: absolute;
+    left: 22px;
+    bottom: 100%;
+    height: 0;
+    width: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid rgba(215, 102, 102, 0.9);
+}
+.cd-form input[type=submit] {
+    padding: 16px 0;
+    cursor: pointer;
+    background: #2f889a;
+    color: #FFF;
+    font-weight: bold;
+    border: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    -o-appearance: none;
+    appearance: none;
+}
+.cd-username {
+    background: url('cd-icon-username.svg');
+}
+.last-fieldset {
+    margin-bottom: 1.5em;
+}

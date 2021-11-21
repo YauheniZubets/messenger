@@ -1,0 +1,44 @@
+main {
+    max-height: 85%;
+    /* height: 65%; */
+    background-color: cornflowerblue;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+}
+.my-tweets {
+    align-self: flex-end;
+    background-color: rgb(70, 197, 11);
+    /* color: crimson; */
+}
+.not-my-tweets {
+    align-self: flex-start;
+    background-color: rgb(247, 234, 234);
+
+}
+.tweet {
+    border-radius: 2%;
+    border-radius: 12px;
+    margin: 2% 2% 2% 2%;
+    padding: 1%;
+    /* width: min-content; */
+    min-width: 3em;
+    float: right;
+    opacity: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+.tweet-mes {
+    /* align-self: flex-end; */
+}
+.tweet-time {
+    font: 0.6em sans-serif;
+    color: rgb(80, 78, 78);
+    /* margin-left: 0.5em; */
+    padding-top: 0.5em;
+    line-height: 0.5em;
+    align-self: flex-end;
+}
+

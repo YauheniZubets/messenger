@@ -1,0 +1,31 @@
+.Footer {
+    background-color: darkcyan;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: stretch;
+    min-height: 5%;
+    max-height: 15%;
+}
+.Text-area {
+    margin: 3px;
+    padding: 3px;
+    display: block;
+    float: left;
+    min-height: 1.5em;
+    height: auto;
+    overflow-y: auto;
+    border-radius: 7px;
+    width: 25vw;
+    background-color: white;
+    max-height: 5em;
+}
+.Form {
+    /* height: 10%; */
+    margin: 5px;
+    
+}
+.Form > input {
+    /* margin-top: 10px; */
+    display: none;
+}
