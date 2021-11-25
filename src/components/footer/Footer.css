@@ -25,7 +25,10 @@
     margin: 5px;
     
 }
-.Form > input {
+#newmes {
     /* margin-top: 10px; */
+    display: none;
+}
+#fileUpload {
     display: none;
 }

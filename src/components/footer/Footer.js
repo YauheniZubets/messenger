@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 
 import firebase from "firebase/app";
 import db from '../firebase'; //firestore
+import { StorageMethods, FirebaseMethods } from '../firebase';
 
 import { uid } from '../firebase';
 import sendLogo from './send.svg';
+import add from './add.svg';
 
 import './Footer.css';
 
@@ -49,38 +51,37 @@ class Footer extends React.PureComponent {
         ev.preventDefault();
         let tweet=this.state.messageValue;
         if (tweet) {
-            db.collection("messages").add({
-                data: tweet,
-                timestamp: firebase.firestore.Timestamp.now(),
-                userID: this.props.uid || 'message written with no ID'
-            })
-            .then((docRef) => {
-                console.log("Document written with ID: ", docRef.id);
-            })
-            .catch((error) => {
-                console.error("Error adding document: ", error);
-            });
-
-            var unsubscribe = db.collection("messages").orderBy("timestamp", "desc").limit(1)
-            .onSnapshot((doc) => {
-                doc.forEach((data) => {
-                    var source = data.metadata.hasPendingWrites ? "Local" : "Server";
-                    console.log("Snapshoted: ", data.data()['data']);
-                    if (source === "Local")  {
-                        this.props.writeMessage({
-                            'tweet' : data.data()['data'],
-                            'timestamp' : data.data()['timestamp'],
-                            'userID' : this.props.uid || 'message written with no ID'
-                        });
-                    }
+            FirebaseMethods.submitMessage(tweet, this.props.uid)
+            .then(data=>{
+                this.props.writeMessage({
+                    'tweet' : data.data()['data'],
+                    'timestamp' : data.data()['timestamp'],
+                    'userID' : this.props.uid || 'message written with no ID'
                 });
-                unsubscribe(); // убираем слушатель состояния снапшота
             });
-            
-        }
+        };
+    
         this.setState({messageValue: ''});
         this.divRef.current.textContent='';
         console.log(this.divRef.current.textContent);
+    }
+
+    cbAddFile = (ev) => { //запись изображения в чат
+        let currentFile = ev.target.files[0];
+        StorageMethods.uploadImage(currentFile)
+            .then((res)=>{
+                FirebaseMethods.submitMessage(res, this.props.uid)
+                    .then(data=>{
+                        let image = new Image();
+                        image.src=data.data()['data'];
+                        this.props.writeMessage({
+                            'tweet' : image,
+                            'timestamp' : data.data()['timestamp'],
+                            'userID' : this.props.uid || 'message written with no ID'
+                        });
+                    });
+            });
+
     }
 
     componentDidMount () { //после монтирования получаем высоту текстареа для дальнейшего сравнения
@@ -94,8 +95,13 @@ class Footer extends React.PureComponent {
         console.log('Footer render');
         return (
             <footer className='Footer'>
+                    <input type='file' id='fileUpload' onChange={this.cbAddFile}/>
+                    <label htmlFor='fileUpload'>
+                        <img src={add} ></img>
+                    </label>
                 <form className='Form' onSubmit={this.submitMessage}>
                     {/* <input type='text' /> */}
+                    
                     <div 
                         className='Text-area' 
                         contentEditable

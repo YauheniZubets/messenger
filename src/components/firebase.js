@@ -2,6 +2,7 @@ import firebase from "firebase/app";
 
 import "firebase/auth";
 import "firebase/firestore";
+import "firebase/storage";
 
 var firebaseConfig = {
     apiKey: "AIzaSyC3b4U0siOImwPIW41ose-d_HSVwmoS6t4",
@@ -15,41 +16,51 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 var db = firebase.firestore();
+
+var storage = firebase.storage();
+var storageRef = storage.ref();
+var imagesRef = storageRef.child('images');
+
 export var auth = firebase.auth();
 
 export default db;
 
 export const user = firebase.auth().currentUser;
 console.log('user from fire.js: ', user);
-if (user !== null) {
-  // The user object has basic properties such as display name, email, etc.
-  //const displayName = user.displayName;
-  // const email = user.email;
-  // const photoURL = user.photoURL;
-  // const emailVerified = user.emailVerified;
 
-  // The user's ID, unique to the Firebase project. Do NOT use
-  // this value to authenticate with your backend server, if
-  // you have one. Use User.getToken() instead.
-  //const uid = user.uid;
-}
-
-// export var deleteUser = function () { //удаление пользователя
-//   const user = firebase.auth().currentUser;
-
-//   user.delete().then(() => {
-//     // User deleted.
-//     console.log('User deleted');
-//   }).catch((error) => {
-//     console.log('error: ', error);
-//     // An error ocurred
-//   });
-// }
 class FireMethods {
   constructor () {
   }
 
   messages=[];
+
+  submitMessage = (tweet, uid) => {
+    db.collection("messages").add({
+        data: tweet,
+        timestamp: firebase.firestore.Timestamp.now(),
+        userID: uid || 'message written with no ID'
+    })
+    .then((docRef) => {
+        console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+        console.error("Error adding document: ", error);
+    });
+    
+    return new Promise((res, rej)=>{
+      var unsubscribe = db.collection("messages").orderBy("timestamp", "desc").limit(1)
+      .onSnapshot((doc) => {
+          doc.forEach((data) => {
+              var source = data.metadata.hasPendingWrites ? "Local" : "Server";
+              console.log("Snapshoted: ", data.data()['data']);
+              if (source === "Local")  {
+                  res(data);
+              }
+          });
+          unsubscribe(); // убираем слушатель состояния снапшота
+      });
+    })
+  }
 
   downloadMessagesFromFirestore = () => {
     //на будущее
@@ -80,15 +91,7 @@ class FireMethods {
       console.log('error: ', error);
       // An error happened.
     });
-    // firebase.auth().onAuthStateChanged((user) => {
-    //   user.delete().then(() => {
-    //     // User deleted.
-    //     console.log('User deleted');
-    //   }).catch((error) => {
-    //     console.log('error: ', error);
-    //     // An error ocurred
-    //   });
-    // })
+    
   }
   
 
@@ -119,3 +122,37 @@ class FireMethods {
 
 export var FirebaseMethods = new FireMethods();
 
+class Storage {
+
+  uploadImage = (file) => {
+    var uploadTask = imagesRef.child('images').put(file);
+    return new Promise((res, rej)=>{
+      uploadTask.on('state_changed', 
+        (snapshot) => {
+          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        }, 
+        (error) => {
+          console.log('error: ', error);
+        }, 
+        () => {
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            console.log('File available at', downloadURL);
+            res(downloadURL);
+          });
+        }
+      );
+    })  
+  }
+  
+}
+
+export var StorageMethods = new Storage();
