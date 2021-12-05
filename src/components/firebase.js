@@ -34,11 +34,15 @@ class FireMethods {
 
   messages=[];
 
-  submitMessage = (tweet, uid) => {
+  submitMessage = (tweet, uid, isPicture) => {
+    if (isPicture) {
+
+    }
     db.collection("messages").add({
         data: tweet,
         timestamp: firebase.firestore.Timestamp.now(),
-        userID: uid || 'message written with no ID'
+        userID: uid || 'message written with no ID',
+        isImage : isPicture || false //маркер если картинка
     })
     .then((docRef) => {
         console.log("Document written with ID: ", docRef.id);
@@ -70,7 +74,8 @@ class FireMethods {
               { 
                   'tweet': doc.data()['data'],
                   'timestamp' : doc.data()['timestamp'],
-                  'userID': doc.data()['userID']
+                  'userID': doc.data()['userID'],
+                  'isImage' : doc.data()['isImage']
               } 
           );
       });
@@ -94,6 +99,11 @@ class FireMethods {
     
   }
   
+  createImage = (url) => {
+    let image = new Image();
+    image.src=url;
+    return image;
+  }
 
   getCurrentUser = () => {
     //let us=null;

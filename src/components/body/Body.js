@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import ImageModal from '../showImageModal/modal';
 import db from '../firebase';
 import { FirebaseMethods } from '../firebase';
 
@@ -18,7 +19,9 @@ class Body extends React.PureComponent {
 
     state = {
         loadedMessages : [],
-        bodyOffset : 0
+        bodyOffset : 0,
+        showImageModal : false,
+        choosedImageModalSrc : '' 
     }
 
     lastTimestamp = null;
@@ -70,7 +73,7 @@ class Body extends React.PureComponent {
         console.log('Body did Mount');
         FirebaseMethods.downloadMessagesFromFirestore().then((messages)=>{ //возвращается промис и далее его заносим в стейт
             //let immutableMessagesCopy=[...this.state.loadedMessages];
-            this.lastTimestamp=messages[messages.length-1]['timestamp'];
+            if (messages.length>0) this.lastTimestamp=messages[messages.length-1]['timestamp'];
             this.setState({loadedMessages : messages});
         })
     }
@@ -86,21 +89,39 @@ class Body extends React.PureComponent {
             this.onceScroll = false; //флаг для одного запроса
             //вся высота прокрутки плюс высота клиента будет больше высоты скролла тогда подгрузка 
         }
-        
-    }  
+    }
+    
+    cbShowImageModal = (e) => {
+        let targetSource=e.target.getAttribute('src');
+        console.log('targetSource: ', targetSource);
+        this.setState({
+            showImageModal: true,
+            choosedImageModalSrc: targetSource
+        });
+    }
+
+    cbCloseImage = () => {
+        this.setState({showImageModal: false});
+    }
 
     render () {
         console.log('render body', this.props.size);
         //const {allMessages} = this.props;
 
         let messagesToVew=this.state.loadedMessages.map((item, index)=>{
+            
             let date= new Date (item.timestamp.toDate()); // часы и минуты в сообщ
+            
             return (
                 <section  
                         key={index} 
                         className={`tweet ${item.userID === this.props.uid ? 'my-tweets' : 'not-my-tweets' }`}>
                     <div className='tweet-mes'>
-                        {item.tweet}
+                        {
+                            !item.isImage
+                            ? item.tweet
+                            : <img src={item.tweet} onClick={this.cbShowImageModal} className='myImg' alt='Image'/>
+                        }
                     </div>
                     <div className='tweet-time'>
                         {date.getHours()}:{date.getMinutes()}
@@ -110,11 +131,16 @@ class Body extends React.PureComponent {
         });
 
         return (
-            <main onScroll={this.downloadAfterScroll} style={{height: `${85-this.state.bodyOffset}%`}} ref={this.bodyRef}>
+            <>
+                <main onScroll={this.downloadAfterScroll} style={{height: `${85-this.state.bodyOffset}%`}} ref={this.bodyRef}>
+                    {
+                        messagesToVew ? messagesToVew : ''
+                    }
+                </main>
                 {
-                    messagesToVew ? messagesToVew : ''
+                    this.state.showImageModal && <ImageModal src={this.state.choosedImageModalSrc} close={this.cbCloseImage} />
                 }
-            </main>
+            </>    
         )
     }
 }

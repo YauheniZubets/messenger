@@ -56,7 +56,8 @@ class Footer extends React.PureComponent {
                 this.props.writeMessage({
                     'tweet' : data.data()['data'],
                     'timestamp' : data.data()['timestamp'],
-                    'userID' : this.props.uid || 'message written with no ID'
+                    'userID' : this.props.uid || 'message written with no ID',
+                    'isImage' : data.data()['isImage']
                 });
             });
         };
@@ -70,14 +71,16 @@ class Footer extends React.PureComponent {
         let currentFile = ev.target.files[0];
         StorageMethods.uploadImage(currentFile)
             .then((res)=>{
-                FirebaseMethods.submitMessage(res, this.props.uid)
+                //let image = new Image();
+                //image.src=res;
+                FirebaseMethods.submitMessage(res, this.props.uid, true)
                     .then(data=>{
-                        let image = new Image();
-                        image.src=data.data()['data'];
+                        
                         this.props.writeMessage({
-                            'tweet' : image,
+                            'tweet' : data.data()['data'],
                             'timestamp' : data.data()['timestamp'],
-                            'userID' : this.props.uid || 'message written with no ID'
+                            'userID' : this.props.uid || 'message written with no ID',
+                            'isImage' : data.data()['isImage']
                         });
                     });
             });
