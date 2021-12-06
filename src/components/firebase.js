@@ -19,7 +19,7 @@ var db = firebase.firestore();
 
 var storage = firebase.storage();
 var storageRef = storage.ref();
-var imagesRef = storageRef.child('images');
+
 
 export var auth = firebase.auth();
 
@@ -134,8 +134,9 @@ export var FirebaseMethods = new FireMethods();
 
 class Storage {
 
-  uploadImage = (file) => {
-    var uploadTask = imagesRef.child('images').put(file);
+  uploadImage = (file, name) => {
+    var imagesRef = storageRef.child(`images/${name}`);
+    var uploadTask = imagesRef.put(file);
     return new Promise((res, rej)=>{
       uploadTask.on('state_changed', 
         (snapshot) => {

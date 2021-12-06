@@ -69,7 +69,8 @@ class Footer extends React.PureComponent {
 
     cbAddFile = (ev) => { //запись изображения в чат
         let currentFile = ev.target.files[0];
-        StorageMethods.uploadImage(currentFile)
+        console.log('currentFile: ', currentFile);
+        StorageMethods.uploadImage(currentFile, currentFile.name)
             .then((res)=>{
                 //let image = new Image();
                 //image.src=res;
