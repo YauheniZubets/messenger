@@ -13,6 +13,7 @@ class App extends React.PureComponent {
   state = {
     newMessage : {},
     uid: '',
+    uName:'',
     bodySize: 0
   }
 
@@ -24,9 +25,12 @@ class App extends React.PureComponent {
     }
   }
 
-  cbGetUserID = (id) => { // uid в footer для маркера сообщений
+  cbGetUserID = (id, name) => { // uid в footer для маркера сообщений
     console.log('id: ', id);
-    this.setState({uid: id});
+    this.setState({
+      uid: id,
+      uName: name
+    });
   }
 
   cbUpdateApp = () => {
@@ -49,6 +53,7 @@ class App extends React.PureComponent {
               newMessage={this.state.newMessage} 
               uid={this.state.uid} 
               size={this.state.bodySize || 0}
+              uName={this.state.uName || 'Аноним'}
           />
           <Footer 
               writeMessage={this.writeMessage} 

@@ -59,7 +59,7 @@ class Header extends React.PureComponent {
         let user = FirebaseMethods.getCurrentUser();
         user.then((user)=> {
             if (user) {
-                this.props.takeUserID(user.uid);
+                this.props.takeUserID(user.uid, user.displayName);
                 this.setState({
                     uid: user.uid,
                     userName: user.displayName,
@@ -99,7 +99,7 @@ class Header extends React.PureComponent {
                     <div className='user-hello'>
                         {
                             this.state.uid 
-                            ? `Hello, ${this.state.userName}!`
+                            ? `Ты в сети, ${this.state.userName}!`
                             : 'Press Login button'
                         }
                     </div>

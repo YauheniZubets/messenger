@@ -44,7 +44,13 @@ class Footer extends React.PureComponent {
     }
 
     cbKey = (ev) => { //валидировать первый enter
-        //if (ev.keyCode === 13) this.props.nextString();
+        // if (ev.keyCode === 13) {
+        //     let target=ev.target;
+        //     console.log(target.innerHTML);
+        //     let space=document.createElement('br');
+        //     target.append(space);
+        //     console.log('newTweet: ', newTweet);
+        // };
     }
 
     submitMessage = (ev) => { //отправка сообщ. в чат
@@ -112,9 +118,10 @@ class Footer extends React.PureComponent {
                         onInput={this.cbNewMessage}
                         ref={this.divRef}
                         onKeyDown={this.cbKey}
+                        
                     ></div>
                     <input id='newmes' type='submit' value='Send' />
-                    <label htmlFor='newmes'>
+                    <label htmlFor='newmes' className='label-send'>
                         <img src={sendLogo} ></img>
                     </label>
                 </form>

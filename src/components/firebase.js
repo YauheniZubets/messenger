@@ -70,6 +70,7 @@ class FireMethods {
     //на будущее
     return db.collection("messages").orderBy("timestamp", "desc").limit(25).get().then((querySnapshot) => {
       querySnapshot.forEach((doc, index) => {
+        console.log('doc: ', doc.data());
           this.messages.push(
               { 
                   'tweet': doc.data()['data'],

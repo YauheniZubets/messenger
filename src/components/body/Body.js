@@ -116,6 +116,7 @@ class Body extends React.PureComponent {
                 <section  
                         key={index} 
                         className={`tweet ${item.userID === this.props.uid ? 'my-tweets' : 'not-my-tweets' }`}>
+                    <div className='tweet-writer'>{this.props.uName}</div>    
                     <div className='tweet-mes'>
                         {
                             !item.isImage

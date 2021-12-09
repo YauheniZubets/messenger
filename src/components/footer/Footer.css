@@ -32,3 +32,6 @@
 #fileUpload {
     display: none;
 }
+.label-send > img {
+    margin-top: 1%;
+}
