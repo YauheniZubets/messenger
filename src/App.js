@@ -46,22 +46,22 @@ class App extends React.PureComponent {
   render () {
     console.log('render App');
     return (
-      <div className="App">
-        <div className="main">
-          <Header takeUserID={this.cbGetUserID} update={this.cbUpdateApp}/>
-          <Body 
-              newMessage={this.state.newMessage} 
-              uid={this.state.uid} 
-              size={this.state.bodySize || 0}
-              uName={this.state.uName || 'Аноним'}
-          />
-          <Footer 
-              writeMessage={this.writeMessage} 
-              uid={this.state.uid} 
-              nextString={this.cbNextString}
-          />
+        <div className="App">
+          <div className="main">
+            <Header takeUserID={this.cbGetUserID} update={this.cbUpdateApp}/>
+            <Body 
+                newMessage={this.state.newMessage} 
+                uid={this.state.uid} 
+                size={this.state.bodySize || 0}
+                uName={this.state.uName || 'Аноним'}
+            />
+            <Footer 
+                writeMessage={this.writeMessage} 
+                uid={this.state.uid} 
+                nextString={this.cbNextString}
+            />
+          </div>
         </div>
-      </div>
     )
   }
 }

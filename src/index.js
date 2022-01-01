@@ -1,12 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import PagesLinks from './components/pages/PagesLinks';
+import PagesRouter from './components/pages/PagesRouter';
+
 import './index.css';
+import PagesApp from './pagesApp';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <PagesApp />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );
