@@ -7,7 +7,7 @@
 
 div.main {
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   flex-direction: column;
   /* border: solid 1px black; */
   width: 100%;

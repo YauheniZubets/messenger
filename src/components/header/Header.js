@@ -1,121 +1,75 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {EventEmitter} from 'events';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
-import LoginModal from '../loginModal/Login';
+import { UserDataModal } from '../userDataModal/userDataModal';
+
 import logo from './userlogo.svg';
+import { FirebaseMethods } from '../firebase';
 
-import { auth } from '../firebase';
-import {FirebaseMethods} from '../firebase';
-import firebase from 'firebase';
+import { connect } from 'react-redux';
 
 import './Header.css';
 
-class Header extends React.PureComponent {
 
-    static propTypes= {
-        word : PropTypes.string
+const Header = (props) => {
+
+    const {currentUser, newChat, currentChat, choosedUserForChat} = props;
+
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [userPhoto, setUserPhoto] = useState(false);
+    const [uid, setUid] = useState(props.uid);
+    const [userName, setUserName] = useState(props.uName);
+    const [email, setEmail] = useState('');
+    const [userDataModal, toogleUserDataModal] = useState(false);
+
+
+    const cbShowUserData = () => {
+        toogleUserDataModal(!userDataModal);
     };
 
-    state = {
-        showLoginModal: false,
-        userPhoto: true,
-        uid: '',
-        userName: '',
-        email: ''
-    }
+    useEffect(()=>{
+        if (currentUser?.photoURL?.includes('https:')) setUserPhoto(true);
+    }, [currentUser])
 
-    cbLogin = () => {
-        console.log('logged');
-        this.setState({showLoginModal : !this.state.showLoginModal});
-    }
-
-    closeModal = () => {
-        this.setState({showLoginModal : !this.state.showLoginModal});
-    }
-
-    currentUserData = (uid, name, email) => {
-        if (uid && name && email) { 
-            this.setState({
-                uid: uid,
-                userName: name,
-                email: email
-            })
-        }
-    }
-
-    cbLogOut = () => {
-        FirebaseMethods.deleteUs();
-        this.setState({
-            uid: '',
-            userName: '',
-            email: ''
-        })
-    };
-
-    cbUpdateAfterLogin = () => this.props.update();
-
-    componentDidMount() {
-        let user = FirebaseMethods.getCurrentUser();
-        user.then((user)=> {
-            if (user) {
-                this.props.takeUserID(user.uid, user.displayName);
-                this.setState({
-                    uid: user.uid,
-                    userName: user.displayName,
-                    email: user.email
-                })
-            }
-        });
-    }
-
-    componentDidUpdate() {
-    }
-
-    render () {
-        console.log('Header render');
-        return (
-            <header>
-                <div>
-                    <div className='username-logo'>
-                        {
-                            this.state.userPhoto &&
-                            <div>
-                                <img className='user-photo' src={logo} alt='logo' />
-                            </div>
-                        }
-                    </div>
-                </div>
-                <div>
-                    <span>Общий чат</span>
-                </div>
-                <div>
+    return (
+        <header>
+            <div>
+                <div className='username-logo' onClick = {cbShowUserData}>
                     <div>
-                        <input type='button' className='loginbtn' 
-                            onClick={!this.state.uid ? this.cbLogin : this.cbLogOut}  
-                            value={this.state.uid ? 'Log out' : 'Log in'}
-                        />
-                    </div>
-                    <div className='user-hello'>
-                        {
-                            this.state.uid 
-                            ? `Ты в сети, ${this.state.userName}!`
-                            : 'Press Login button'
-                        }
+                        <img className='user-photo' src={userPhoto ? currentUser.photoURL  : logo} alt='logo' />
                     </div>
                 </div>
-                
-                {
-                    this.state.showLoginModal && 
-                    <LoginModal 
-                        closeModal={this.closeModal} 
-                        currentUserData={this.currentUserData}
-                        updateAllAfterLogin={this.cbUpdateAfterLogin} 
-                    />
-                }
-            </header>
-        )
-    }
+            </div>
+            <div>
+                <span>{newChat || `Чат`}</span>
+            </div>
+            <div>
+                <div>
+                    <Link to ='/' className='menubtn'>Меню</Link>
+                </div>
+                <div className='user-hello'>
+                    {
+                        currentUser 
+                        ? `Ты в сети, ${currentUser.displayName}!`
+                        : 'Press Login button'
+                    }
+                </div>
+            </div>
+            {
+                userDataModal &&
+                <UserDataModal closeModal={()=>toogleUserDataModal(!userDataModal)} user={props.currentUser}/>
+            }
+        </header>
+    )
 }
 
-export default Header;
+const mapStateToProps = function (state) {
+    return {
+      newChat: state.stateMes.newChatName,
+      currentChat: state.stateMes.topicToLoad,
+      currentUser: state.stateMes.currentUser,
+      choosedUserForChat: state.stateMes.choosedUserForChat
+    }
+  }
+
+export default connect(mapStateToProps)(Header);

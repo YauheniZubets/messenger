@@ -1,0 +1,55 @@
+.User-comp {
+    padding: 1%;
+}
+.user {
+    min-height: 50px;
+    max-height: 100px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #69b7eb, #b3dbd3, #f4d6db);
+    opacity: 0.9;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 3%;
+    padding: 5px 0 5px 0; 
+    cursor: pointer;
+    padding: 1%;
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+.user-mes-data {
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.user-mes-data-name {
+    font-weight: bolder;
+    font-size: 18px;
+    padding-bottom: 5px;
+    
+}
+.user-mes-data-message {
+    height: 3rem;
+    font-size: 14px;
+    line-height: 18px;
+    padding-bottom: 5px;
+    color:#918e8f;
+}
+.user-photo {
+    padding-right: 10px;
+}
+.user-photo > img {
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+}
+.User-findbar {
+    border: none;
+    height: 5vh;
+    width: 97%;
+    margin: 5px 0 5px 0;
+    padding: 0 3px 0 3px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #43a9ec, #b3dbd3, #f4d6db);
+}

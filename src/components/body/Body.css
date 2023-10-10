@@ -3,12 +3,27 @@ main {
     /* height: 65%; */
     background-color: cornflowerblue;
     display: flex;
-    flex-direction: column-reverse;
-    overflow-y: auto;
+    flex-direction: row;
+}
+.chats::-webkit-scrollbar-track
+{
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+.chats::-webkit-scrollbar
+{
+  width: 8px;
+}
+.chats::-webkit-scrollbar-thumb
+{
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  background-color: #a9a6a6;
 }
 .my-tweets {
     align-self: flex-end;
-    background-color: rgb(70, 197, 11);
+    background-color: rgb(222 245 211);
     /* color: crimson; */
 }
 .not-my-tweets {
@@ -21,20 +36,22 @@ main {
     border-radius: 12px;
     margin: 2% 2% 2% 2%;
     padding: 1%;
-    /* width: min-content; */
     min-width: 3em;
     float: right;
     opacity: 90%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    
+    overflow-wrap: break-word;
+    max-width: 90%;
+    box-sizing: border-box;
 }
 .tweet-mes {
     /* align-self: flex-end; */
+    white-space: pre-wrap;
 }
 .tweet-mes > img {
-    width: 100px;
+    /* width: 100px; */
     height: 100px;
     margin: 5px;
     border-radius: 5px;
@@ -47,8 +64,7 @@ main {
 .tweet-time {
     font: 0.6em sans-serif;
     color: rgb(80, 78, 78);
-    /* margin-left: 0.5em; */
-    padding-top: 0.5em;
+    padding: 0.5em 0.2em 0.3em 0;
     line-height: 0.5em;
     align-self: flex-end;
 }
@@ -75,3 +91,50 @@ main::-webkit-scrollbar-track {
     border-radius: 10px;
     background-color: #f9f9fd;
 }
+.users {
+    width: 40%;
+}
+.chats {
+    width: 60%;
+    display: flex;
+    flex-direction: column-reverse;
+    overflow-y: auto;
+    position: relative;
+}
+.no-messages {
+    position: absolute;
+    top: 0;
+    left: 30%;
+    color: #f9f9fd;
+}
+.main-preloader {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #F5F5F5;
+    opacity: 0.7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+.main-loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #535252;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    display: inline-block;
+    box-sizing: border-box;
+    animation: rotation 1s linear infinite;
+}
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+} 

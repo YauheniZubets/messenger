@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {EventEmitter} from 'events';
 
-import { FirebaseMethods } from '../firebase';
+import { connect } from 'react-redux';
+import { addUserFromFire } from '../../redux/chatAC';
+
 import { auth } from '../firebase';
+import { addNewUserToList } from '../firebaseUsers';
 
 import './login.css';
 
@@ -15,10 +18,11 @@ class LoginModal extends React.PureComponent {
     }
 
     state = {
-        caseLogin: '1',
+        caseLogin: '2',
         name: '',
         password: '',
-        email: '' 
+        email: '',
+        checkbox: false 
     }
 
     static propTypes= {
@@ -36,6 +40,10 @@ class LoginModal extends React.PureComponent {
         this.props.closeModal();
     }
 
+    cbCheckbox = () => {
+        this.state.checkbox ? this.setState({checkbox: false}) : this.setState({checkbox: true});
+    }
+
     handleChangeEmail = (ev) => {
         this.setState({email: ev.target.value});
     }
@@ -46,10 +54,6 @@ class LoginModal extends React.PureComponent {
 
     handleChangeName = (ev) => {
         this.setState({name: ev.target.value});
-    }
-
-    sendUserData = (uid, name, email) => { //для отображения инфы об юзере
-        this.props.currentUserData(uid, name, email);
     }
 
     cbLoginOrCreate = (ev) => {
@@ -70,32 +74,23 @@ class LoginModal extends React.PureComponent {
         };
         if (this.state.caseLogin === '2') {
             auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-                .then((userCredential) => {
-                    // Signed in
+                .then(() => {
                     const user = auth.currentUser;
-                    console.log('user: ', user);
                     user.updateProfile({
                         displayName: this.state.name,
                         photoURL: "aahhhaha"
                     }).then(() => {
-                        auth.onAuthStateChanged((user) => {
-                            if (user) {
-                                //console.log('user_2: ', user);
-                                // User is signed in, see docs for a list of available properties
-                                // https://firebase.google.com/docs/reference/js/firebase.User
-                                let uid = user.uid;
-                                let userName = user.displayName;
-                                let email = user.email;
-                                this.sendUserData(uid, userName, email);
-                              // ...
-                            } else {
-                              // User is signed out
-                              // ...
-                            }
-                        });
-                        // ...
+                        if (user) {
+                            addNewUserToList(user);
+                            console.log('user: ', user);
+                            const uid = user.uid;
+                            const userName = user.displayName;
+                            const email = user.email;
+                            this.props.dispatch(addUserFromFire(user))
+                            // this.sendUserData(uid, userName, email);
+                        } 
                     }).catch((error) => {
-                        // An error occurred
+                        console.log('error: ', error);
                     });  
                    
                 })
@@ -114,32 +109,15 @@ class LoginModal extends React.PureComponent {
 
     render () {
 
-        // const user = auth.currentUser;
-        // if (user !== null) {
-        //     console.log('user: ', user);
-        //     // The user object has basic properties such as display name, email, etc.
-        //     const displayName = user.displayName;
-        //     console.log('displayName: ', displayName);
-        //     const email = user.email;
-        //     console.log('email: ', email);
-        //     //const photoURL = user.photoURL;
-        //     //const emailVerified = user.emailVerified;
-
-        //     // The user's ID, unique to the Firebase project. Do NOT use
-        //     // this value to authenticate with your backend server, if
-        //     // you have one. Use User.getToken() instead.
-        //     //const uid = user.uid;
-        // }
-
         return (
             <div className='user-modal-login'>
                         <div className='user-modal-container'>
                             <ul className='modal-li'>
                                 <li>
-                                    <a href='#' case='1' className='selected' onClick = {this.changeCase}>Sign in</a> 
+                                    <a href='#' case='1' className={this.state.caseLogin === '1' ? `selected` : ''} onClick = {this.changeCase}>Sign in</a> 
                                 </li>
                                 <li>
-                                    <a href='#' case='2' className='selected' onClick = {this.changeCase}>New account</a>
+                                    <a href='#' case='2' className={this.state.caseLogin === '2' ? `selected` : ''} onClick = {this.changeCase}>New account</a>
                                 </li>
                                 <div className="cl-btn-2" onClick={this.cbClose}>
                                     <div>
@@ -176,7 +154,7 @@ class LoginModal extends React.PureComponent {
                                             <a href="#0" className="hide-password">Hide</a>
                                         </p>
                                         <p className="fieldset">
-                                            <input type="checkbox" id="remember-me" ></input>
+                                            <input type="checkbox" id="remember-me" checked={this.state.checkbox} onChange={this.cbCheckbox}></input>
                                             <label htmlFor="remember-me">Remember me</label>
                                         </p>
                                         <p className='fieldset last-fieldset'>
@@ -221,7 +199,7 @@ class LoginModal extends React.PureComponent {
                                             
                                         </p>
                                         <p className="fieldset">
-                                            <input type="checkbox" id="remember-me" ></input>
+                                            <input type="checkbox" id="remember-me" checked={this.state.checkbox} onChange={this.cbCheckbox}></input>
                                             <label htmlFor="remember-me">Remember me</label>
                                         </p>
                                         <p className='fieldset last-fieldset'>
@@ -241,4 +219,8 @@ class LoginModal extends React.PureComponent {
     }
 }
 
-export default LoginModal;
+function mapStateToProps (state) {
+    return 
+}
+  
+export default connect(mapStateToProps)(LoginModal) ;

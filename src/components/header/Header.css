@@ -10,16 +10,28 @@ header {
 .loginbtn {
     height: 20px;
     float: right;
+    background-color: lightgray;
+    border: none;
+    padding: 1.5%;
 }
 div.username-logo {
     height: 50px;
     width: 50px;
 }
 img.user-photo {
-    width: 90%;
+    width: 50px;
     height: auto;
+    border-radius: 50%;
+    height: 50px;
 }
 .user-hello{
     padding-top: 0.2em;
+    float: right;
+}
+.menubtn {
+    text-decoration: none;
+    background-color: lightgray;
+    color: black;
+    padding: 1.5%;
     float: right;
 }
